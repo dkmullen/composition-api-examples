@@ -4,18 +4,35 @@
     <h2>{{ user.age }}</h2>
     <h2>{{ userName }}</h2>
     <button @click="changeSomething">Change</button>
+    <hr />
+    <p>{{ fullName }}</p>
+    <input type="text" placeholder="First Name" @input="setFirstName" />
+    <input type="text" placeholder="Last Name" v-model="lastName" />
   </div>
 </template>
 
 <script>
-import { ref, reactive } from '@vue/reactivity';
+import { ref, reactive, computed, watch } from 'vue';
 export default {
   setup() {
     // ref is for any type, reactive is for objects;
     const userName = ref('dkmullen');
+    const firstName = ref('');
+    const lastName = ref('');
     const user = reactive({
       name: 'Dennis',
       age: 57,
+    });
+
+    // Computed props are read-only; Can't set it directly elsewhere
+    const fullName = computed(() => {
+      return firstName.value + ' ' + lastName.value;
+    });
+
+    // Watch returns new and old values; can use one item or an array
+    watch([firstName, lastName], function (newValuez, oldValuez) {
+      console.log(newValuez[0], oldValuez[0]);
+      console.log(newValuez[1], oldValuez[1]);
     });
 
     setTimeout(() => {
@@ -28,7 +45,18 @@ export default {
       this.user.age -= 1;
     }
 
-    return { user, userName, changeSomething };
+    function setFirstName(event) {
+      firstName.value = event.target.value;
+    }
+
+    return {
+      user,
+      userName,
+      changeSomething,
+      setFirstName,
+      lastName,
+      fullName,
+    };
   },
 };
 </script>
