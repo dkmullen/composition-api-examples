@@ -4,7 +4,7 @@
     <h3>{{ age }}</h3>
   </section>
   <section class="container">
-    <App2 />
+    <App2 :message="'Hey now!'" @myMessage="showMsg" />
   </section>
   <section class="container">
     <App3 />
@@ -24,9 +24,13 @@ export default {
     setTimeout(() => {
       uName.value = 'Maximilian';
     }, 2000);
+    function showMsg(msg) {
+      console.log(msg);
+    }
     return {
       userName: uName,
       age,
+      showMsg,
     };
   },
   // data() {

@@ -12,10 +12,17 @@
 </template>
 
 <script>
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, reactive, computed, watch, onMounted } from 'vue';
 export default {
-  setup() {
+  props: ['message'],
+  // props, context get passed automatically to setup; here I just give
+  // them a name
+  setup(props, context) {
     // ref is for any type, reactive is for objects;
+    console.log(props.message, context);
+
+    // Here's how we emit
+    context.emit('myMessage', 'hello');
     const userName = ref('dkmullen');
     const firstName = ref('');
     const lastName = ref('');
@@ -48,6 +55,12 @@ export default {
     function setFirstName(event) {
       firstName.value = event.target.value;
     }
+
+    // Lifecycle hooks now imported and called as functions; no created or
+    // beforeCreated, as these are replaced by setup itself;
+    onMounted(() => {
+      console.log('mounted');
+    });
 
     return {
       user,
